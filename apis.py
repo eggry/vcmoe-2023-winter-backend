@@ -6,7 +6,7 @@ License: MIT License
 
 import random
 from math import ceil
-from typing import MutableSequence
+from typing import Dict, List, MutableSequence
 import requests
 
 from storage import dump_to_json
@@ -70,3 +70,13 @@ def shuffle_with_seed(items: MutableSequence, seed):
     random.Random(seed).shuffle(items)
 
     dump_to_json(f"shuffle_{type(seed).__name__}_{seed}",items)
+
+def assign_page(items: List[Dict], page_size:int):
+    print(
+        f"assigning page. len: {len(items)}, page_size: {page_size}")
+    
+    for idx,item in enumerate(items):
+        item["_page"]=(idx//page_size)+1
+        item["_page_idx"]=(idx%page_size)+1
+
+    dump_to_json(f"assign_page_{len(items)}_{page_size}",items)

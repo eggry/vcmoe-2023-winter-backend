@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from apis import get_all_fav_video, shuffle_with_seed,get_fav
+from apis import assign_page, get_all_fav_video, shuffle_with_seed,get_fav
 from mocks import mock_all_fav_videos
 
 app = FastAPI()
@@ -36,10 +36,12 @@ def list_fav():
     return fav_list["data"]["list"]
 
 @app.get("/fav/{fav_id}")
-def list_fav_video(fav_id: int, shuffle: bool = False, seed: Optional[int | str] = None):
+def list_fav_video(fav_id: int, shuffle: bool = False, seed: Optional[int | str] = None, page_size: Optional[int] = None):
     print(
         f"fav video request. id: {fav_id}, shuffle: {shuffle}, seed: {seed}, seed_type: {type(seed).__name__}")
     videos = get_all_fav_video(fav_id)
-    if (shuffle):
+    if shuffle:
         shuffle_with_seed(videos, seed)
+    if page_size and page_size > 0:
+        assign_page(videos, page_size)
     return videos
