@@ -8,7 +8,8 @@ from mocks import mock_all_fav_videos
 app = FastAPI()
 
 origins = [
-    "http://localhost",
+    "https://localhost:8080",
+    "https://xiaohengshu.com"
 ]
 
 app.add_middleware(

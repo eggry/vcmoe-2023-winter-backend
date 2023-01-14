@@ -9,7 +9,7 @@ from math import ceil
 from typing import MutableSequence
 import requests
 
-from dump import dump_to_json
+from storage import dump_to_json
 
 __fav_list = "https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid={mid}"
 
