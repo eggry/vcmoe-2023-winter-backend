@@ -2,13 +2,14 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from apis import assign_page, get_all_fav_video, shuffle_with_seed,get_fav
+from apis import assign_group, assign_page, get_all_fav_video, get_draw_result, shuffle_with_seed,get_fav
 from mocks import mock_all_fav_videos
 
 app = FastAPI()
 
 origins = [
     "https://localhost:8080",
+    "http://localhost:8081",
     "https://xiaohengshu.com"
 ]
 
@@ -44,4 +45,10 @@ def list_fav_video(fav_id: int, shuffle: bool = False, seed: Optional[int | str]
         shuffle_with_seed(videos, seed)
     if page_size and page_size > 0:
         assign_page(videos, page_size)
+    return videos
+
+@app.get("/group/{group_id}")
+def list_group_result(group_id:int,perfer_size:int):
+    videos = get_draw_result(group_id)
+    assign_group(videos,10)
     return videos

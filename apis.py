@@ -9,7 +9,7 @@ from math import ceil
 from typing import Dict, List, MutableSequence
 import requests
 
-from storage import dump_to_json
+from storage import dump_to_json,__data_dir
 
 __fav_list = "https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid={mid}"
 
@@ -62,8 +62,11 @@ def get_all_fav_video(fvid, ps=20):
     dump_to_json(f"all_fav_video_{fvid}_{ps}",r)
 
     return favs
-
-
+import json
+def get_draw_result(files):
+    with open(f"{__data_dir}/draw_result/1.json","r",encoding="utf-8") as f:
+        return json.load(f)
+    
 def shuffle_with_seed(items: MutableSequence, seed):
     print(
         f"shuffle with seed. len: {len(items)}, seed: {seed}, seed_type:{type(seed).__name__}")
@@ -80,3 +83,23 @@ def assign_page(items: List[Dict], page_size:int):
         item["_page_idx"]=(idx%page_size)+1
 
     dump_to_json(f"assign_page_{len(items)}_{page_size}",items)
+
+def assign_group(items: List[Dict], prefer_size:int):
+    print(
+        f"assigning group. len: {len(items)}, prefer_size: {prefer_size}")
+
+    group_count, extra = divmod(len(items), prefer_size)
+
+    group_info_list=[]
+    for group_idx in range(group_count):
+        group_id = chr(65+group_idx)
+        group_size = prefer_size+1 if group_idx<extra else prefer_size
+        group_info_list.extend(
+            {"_group_id": group_id, "_group_idx": item_idx}
+            for item_idx in range(1,group_size+1)
+        )
+
+    for item,group_info in zip(items,group_info_list):
+        item|=group_info
+
+    dump_to_json(f"assign_group_{len(items)}_{prefer_size}",items)
