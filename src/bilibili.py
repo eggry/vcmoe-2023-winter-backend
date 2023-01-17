@@ -53,6 +53,8 @@ def list_reply_replies(avid, rpid):
     total = r["data"]["page"]["count"]
     page_size = r["data"]["page"]["size"]
     replies = r["data"]["replies"]
+    if not replies:
+        replies=[]
     root = r["data"]["root"]
     total_page_size = ceil(total/page_size)
     for i in range(2, total_page_size+1):
