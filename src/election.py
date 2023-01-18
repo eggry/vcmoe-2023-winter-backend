@@ -29,7 +29,8 @@ def parse_election(reply):
 
 def parse_vote(reply):
     message = reply["content"]["message"]
-    votes = message.split() if re.match(r"^[A-Z0-9 ]+$", message) else []
+    message_vote=message.replace(","," ").replace("，"," ")
+    votes = message_vote.split() if re.match(r"^[A-Z0-9 ]+$", message_vote) else []
     result = {
         "message": message,
         "ctime": reply["ctime"],
