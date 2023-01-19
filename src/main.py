@@ -52,8 +52,8 @@ def list_groups(
 def list_elections():
     min_timestamp = utils.days_before_timestamp(-3)
     replies = []
-    for _ in range(30):
-        r = bilibili.list_video_replies_by_page(config.HOST_AVID)
+    for pn in range(1,30):
+        r = bilibili.list_video_replies_by_page(config.HOST_AVID,pn)
         replies += r["data"]["replies"]
         last_timestamp = replies[-1]['ctime']
         if last_timestamp <= min_timestamp:

@@ -7,7 +7,7 @@ def current_CST_timecode():
 
 
 def days_before_timestamp(days):
-    dt = datetime.now() - timedelta(days=days)
+    dt = datetime.now() + timedelta(days=days)
     return dt.timestamp()
 
 
