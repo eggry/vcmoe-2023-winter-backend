@@ -11,7 +11,7 @@ def parse_election(reply):
             group = res[1]
             count = res[2]
             final = res[3]
-            videos = re.findall(r"([0-9A-Z]+)[\. ](.*av[\d/]*)",
+            videos = re.findall(r"([0-9A-Z]+)[\. ](.*av[\d/]*|.*BV[A-Za-z0-9/]*)",
                                 reply["content"]["message"])
             jump_url = reply["content"]["jump_url"]
             videos = [{"idx": idx, "avid": jump_url[url]['click_report'],
