@@ -14,8 +14,9 @@ def parse_election(reply):
             videos = re.findall(r"([0-9A-Z]+)[\. ](.*av[\d/]*|.*BV[A-Za-z0-9/]*)",
                                 reply["content"]["message"])
             jump_url = reply["content"]["jump_url"]
-            videos = [{"idx": idx, "avid": jump_url[url]['click_report'],
-                       "title":jump_url[url]['title']} for idx, url in videos]
+            it = videos or enumerate(jump_url, 1)
+            videos = [{"idx": str(idx), "avid": jump_url[url]['click_report'],
+                       "title":jump_url[url]['title']} for idx, url in it]
             return ({
                 "rpid": reply["rpid"],
                 "title": title,
@@ -30,8 +31,10 @@ def parse_election(reply):
 def parse_vote(reply):
     message = reply["content"]["message"]
 
-    message_vote=message.replace("23","2,3").replace(","," ").replace("，"," ")
-    votes = message_vote.split() if re.match(r"^[A-Z0-9 ]+$", message_vote) else []
+    message_vote = message.replace(
+        "23", "2,3").replace(",", " ").replace("，", " ")
+    votes = message_vote.split() if re.match(
+        r"^[A-Z0-9 ]+$", message_vote) else []
     result = {
         "message": message,
         "ctime": reply["ctime"],
