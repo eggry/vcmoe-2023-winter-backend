@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 
-@app.get("/favorites")
+@app.get("/favorites", summary="列出主办者的收藏夹列表")
 def list_favorites():
     print("proccess list favorites request.")
     favorites = bilibili.list_favorites(config.HOST_UID)
@@ -32,7 +32,7 @@ def list_favorites():
     return result
 
 
-@app.get("/favorites/{fvid}")
+@app.get("/favorites/{fvid}", summary="列出主办者某个收藏夹的视频列表")
 def list_favorite(fvid: int):
     result = bilibili.list_favorite_videos(config.HOST_UID, fvid)
     seq.assign_idx(result)
@@ -40,7 +40,7 @@ def list_favorite(fvid: int):
     return result
 
 
-@app.get("/favorites/{fvid}/groups")
+@app.get("/favorites/{fvid}/groups", summary="列出主办者某个收藏夹视频列表的分组结果")
 def list_groups(
         fvid: int,
         perfer_size: int,
@@ -56,7 +56,7 @@ def list_groups(
     return result
 
 
-@app.get("/elections")
+@app.get("/elections", summary="列出主办视频评论区近3天的投票楼")
 def list_elections():
     min_timestamp = utils.days_delta_timestamp(-3)
     replies = []
@@ -75,7 +75,7 @@ def list_elections():
     return elections
 
 
-@app.get("/elections/{rpid}/votes")
+@app.get("/elections/{rpid}/votes", summary="列出主办视频评论区某投票楼的投票评论")
 def list_votes_in_reply(rpid: int):
     votes = []
     replies, root = bilibili.list_reply_replies(config.HOST_AVID, rpid)
@@ -86,7 +86,7 @@ def list_votes_in_reply(rpid: int):
     return votes
 
 
-@app.get("/elections/{rpid}/result")
+@app.get("/elections/{rpid}/result", summary="列出主办视频评论区某投票楼的投票结果")
 def get_election_result(rpid: int):
     result = []
     replies, root = bilibili.list_reply_replies(config.HOST_AVID, rpid)
