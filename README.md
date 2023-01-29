@@ -1,6 +1,6 @@
 # 小横竖2023冬曲萌后端
 ## Demo
-[Swagger UI](https://xiaohengshu.com/vcmoe-2023-winter/draw.html)
+[Swagger UI](https://vc-moe-202301.azurewebsites.net/docs)
 ## 配置
 程序配置使用环境变量，相关代码见 [config.py](./src/config.py)
 
@@ -32,16 +32,16 @@ pip install -r ./requirements.txt
 ```
 
 ## 概述
-本项目主要使用 [FastAPI](https://fastapi.tiangolo.com/zh/)开发，主要实现曲萌视频抽签、曲萌投票统计功能。
+本项目主要使用 [FastAPI](https://fastapi.tiangolo.com/zh/) 开发，主要服务于曲萌视频抽签、曲萌投票统计功能。
 
 本程序设计为无状态服务。数据实时从B站收藏夹或评论区解析，在本地仅记录日志，不存储任何永久状态。
 
 ```
 .
-├── main.py      # API
-├── bilibili.py  # 获取B站API
 ├── config.py    # 程序配置
+├── main.py      # API
 ├── election.py  # 投票评论解析
+├── bilibili.py  # 获取B站数据
 ├── seq.py       # 分组、编号
 ├── storage.py   # 日志
 └── utils.py     
