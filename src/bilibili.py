@@ -54,7 +54,7 @@ def list_reply_replies(avid, rpid):
     page_size = r["data"]["page"]["size"]
     replies = r["data"]["replies"]
     if not replies:
-        replies=[]
+        replies = []
     root = r["data"]["root"]
     total_page_size = ceil(total/page_size)
     for i in range(2, total_page_size+1):
@@ -66,28 +66,39 @@ def list_reply_replies(avid, rpid):
     return replies, root
 
 
-def list_favorite_videos(fvid):
-    page_size = 20
+def list_favorite_videos(mid, fvid):
 
-    r = list_favorite_videos_by_page(fvid)
-    total = r['data']['info']['media_count']
-    result = r['data']['medias']
+    result = []
+    has_more = True
+    pn = 1
 
-    if not result:
-        return []
+    while has_more:
+        r = list_favorite_videos_by_page(fvid, pn=pn)
 
-    total_page_size = ceil(total/page_size)
+        mid_info = r['data']['info']['mid']
+        media_count = r['data']['info']['media_count']
+        has_more = r['data']["has_more"]
+        medias = r['data']['medias']
 
-    for i in range(2, total_page_size+1):
-        r = list_favorite_videos_by_page(fvid, i, page_size)
-        result += r['data']['medias']
+        # mid mismatch
+        if mid_info != mid:
+            print(
+                f"mid mismatch! expected:{mid}, actual: {mid_info}")
+            break
 
-    actual_total = len(result)
+        if medias:
+            result += medias
+
+        if len(result) > media_count:
+            print("media count exceeded")
+            break
+
+        pn += 1
 
     print(
-        f"fav all video count: fvid: {fvid}, count: {total}, actual:{actual_total}")
+        f"fav all video count: fvid: {fvid}, total: {len(result)}")
 
     dump_data("list_favorite_videos", {
-              "result": result, "fvid": fvid})
+              "result": result, "fvid": fvid, "mid": mid})
 
     return result

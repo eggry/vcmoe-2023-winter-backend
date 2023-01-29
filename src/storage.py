@@ -10,4 +10,4 @@ os.makedirs(DUMP_DIR, exist_ok=True)
 def dump_data(tag, data):
     timecode = current_CST_timecode()
     with open(f"{DUMP_DIR}/{timecode}-{tag}.json", "w", encoding="utf-8") as f:
-        json.dump(data, f)
+        json.dump(data, f, ensure_ascii=False)

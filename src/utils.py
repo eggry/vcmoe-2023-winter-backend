@@ -6,8 +6,8 @@ def current_CST_timecode():
     return datetime.now(timezone(timedelta(hours=8))).strftime('%Y%m%d-%H%M%S-%f')
 
 
-def days_before_timestamp(days):
-    dt = datetime.now() + timedelta(days=days)
+def days_delta_timestamp(daysdelta):
+    dt = datetime.now() + timedelta(days=daysdelta)
     return dt.timestamp()
 
 

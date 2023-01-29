@@ -3,7 +3,7 @@ import re
 
 
 def parse_election(reply):
-    if str(reply["mid"]) == HOST_UID:
+    if reply["mid"] == HOST_UID:
         if res := re.match(
             r"^【(.*)】(\d+)进(\d+)", reply["content"]["message"]
         ):
@@ -31,8 +31,12 @@ def parse_election(reply):
 def parse_vote(reply):
     message = reply["content"]["message"]
 
-    message_vote = message.replace(
-        "23", "2,3").replace(",", " ").replace("，", " ")
+    tmp = message
+    tmp = tmp.replace(
+        "23", "2,3")  # ad hoc
+    tmp = tmp.replace(",", " ")
+    tmp = tmp.replace("，", " ")
+    message_vote = tmp
     votes = message_vote.split() if re.match(
         r"^[A-Z0-9 ]+$", message_vote) else []
     result = {

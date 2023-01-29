@@ -32,12 +32,20 @@ def list_favorites():
     return result
 
 
+@app.get("/favorites/{fvid}")
+def list_favorite(fvid: int):
+    result = bilibili.list_favorite_videos(config.HOST_UID, fvid)
+    seq.assign_idx(result)
+    dump_data("api_list_favorite", {"result": result, "fvid": fvid})
+    return result
+
+
 @app.get("/favorites/{fvid}/groups")
 def list_groups(
         fvid: int,
         perfer_size: int,
         shuffle_seed: Optional[int | str] = None):
-    result = bilibili.list_favorite_videos(fvid)
+    result = bilibili.list_favorite_videos(config.HOST_UID, fvid)
 
     seq.shuffle_with_seed(result, shuffle_seed)
 
@@ -50,10 +58,10 @@ def list_groups(
 
 @app.get("/elections")
 def list_elections():
-    min_timestamp = utils.days_before_timestamp(-3)
+    min_timestamp = utils.days_delta_timestamp(-3)
     replies = []
-    for pn in range(1,30):
-        r = bilibili.list_video_replies_by_page(config.HOST_AVID,pn)
+    for pn in range(1, 30):
+        r = bilibili.list_video_replies_by_page(config.HOST_AVID, pn)
         replies += r["data"]["replies"]
         last_timestamp = replies[-1]['ctime']
         if last_timestamp <= min_timestamp:
